@@ -34,4 +34,4 @@ AIGC · diffusion · image watermark · provenance
 
 ## License
 
-本项目建议采用 MIT License；实际开源时请根据课题组要求确认许可证。
+本项目采用 MIT License 开源。Copyright (c) 2026 Lin Yubin, Zeng Ke, Tian Chengjin, Shanxiang Lv, Jinan University.
