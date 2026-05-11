@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>生成式图像水印嵌入与验证框架 - Visual Report</title>
+  <style>
+    :root {
+      --ink:#172033; --muted:#667085; --line:#d9e2ec; --bg:#f6f8fb;
+      --blue:#2563eb; --teal:#0f9f8f; --amber:#d97706; --rose:#e11d48;
+    }
+    * { box-sizing:border-box; }
+    body { margin:0; font-family:"Microsoft YaHei", "Segoe UI", Arial, sans-serif; color:var(--ink); background:var(--bg); }
+    main { max-width:1120px; margin:0 auto; padding:32px 24px 48px; }
+    header { background:#ffffff; border:1px solid var(--line); border-radius:10px; padding:28px 30px; }
+    h1 { margin:0 0 10px; font-size:30px; line-height:1.25; }
+    h2 { margin:0 0 16px; font-size:20px; }
+    p { line-height:1.75; }
+    .meta { display:flex; flex-wrap:wrap; gap:10px; margin-top:18px; }
+    .tag { border:1px solid #c8d4e3; border-radius:999px; padding:6px 12px; background:#fff; color:#344054; font-size:13px; }
+    .grid { display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin:18px 0; }
+    .card { background:#fff; border:1px solid var(--line); border-radius:10px; padding:18px; }
+    .metric-value { font-size:30px; font-weight:700; margin-top:8px; }
+    .muted { color:var(--muted); font-size:13px; }
+    .section { margin-top:18px; }
+    .two { display:grid; grid-template-columns:1.15fr .85fr; gap:18px; }
+    .bar-row { display:grid; grid-template-columns:160px 1fr 52px; align-items:center; gap:12px; margin:12px 0; }
+    .bar-label { color:#344054; font-size:14px; }
+    .bar-track { height:12px; background:#edf2f7; border-radius:999px; overflow:hidden; }
+    .bar-track span { display:block; height:100%; border-radius:999px; }
+    .bar-value { text-align:right; color:#344054; font-variant-numeric:tabular-nums; }
+    .flow { display:flex; align-items:stretch; gap:8px; flex-wrap:wrap; }
+    .flow-node { min-width:150px; flex:1; border:1px solid #c8d4e3; background:#fff; border-radius:8px; padding:12px; }
+    .flow-node b { display:inline-grid; place-items:center; width:24px; height:24px; border-radius:50%; background:var(--blue); color:#fff; margin-right:8px; }
+    .flow-arrow { align-self:center; color:#98a2b3; font-weight:700; }
+    table { width:100%; border-collapse:collapse; }
+    th, td { border-bottom:1px solid var(--line); text-align:left; padding:10px 8px; }
+    th { color:#344054; background:#f8fafc; }
+    code, pre { font-family:Consolas, "Courier New", monospace; }
+    pre { max-height:260px; overflow:auto; background:#0f172a; color:#dbeafe; padding:16px; border-radius:8px; font-size:12px; }
+    .result-ok { color:#047857; font-weight:700; }
+    footer { margin-top:20px; color:var(--muted); font-size:13px; }
+    @media (max-width:860px) { .grid, .two { grid-template-columns:1fr; } .bar-row { grid-template-columns:1fr; } .bar-value { text-align:left; } }
+  </style>
+</head>
+<body>
+<main>
+  <header>
+    <h1>生成式图像水印嵌入与验证框架</h1>
+    <p>本项目面向生成式图像内容保护，提供扩散模型生成图像的水印嵌入、扰动增强、压缩攻击、裁剪攻击和水印验证流程。框架可对接本地生成图像样本，比较空间域水印、频域水印和神经水印的鲁棒性差异，并输出可视化检测报告。项目适用于 AIGC 内容溯源、生成式媒体版权保护和人工智能安全课程实践，可作为后续研究生成式内容可追踪机制的基础代码，并支持批量评测、样例导出和参数记录。</p>
+    <div class="meta">
+      <span class="tag">仓库：diffusion-image-watermark</span>
+      <span class="tag">负责人：林裕斌</span>
+      <span class="tag">参与人：曾科、田承金</span>
+      <span class="tag">指导教师：吕善翔</span>
+      <span class="tag">MIT License</span>
+    </div>
+  </header>
+
+  <section class="grid">
+    <div class="card"><div class="muted">Payload 恢复</div><div class="metric-value result-ok">True</div></div>
+    <div class="card"><div class="muted">代码规模</div><div class="metric-value">1012</div><div class="muted">Python 有效行</div></div>
+    <div class="card"><div class="muted">质量得分</div><div class="metric-value">89%</div></div>
+    <div class="card"><div class="muted">鲁棒性得分</div><div class="metric-value">79%</div></div>
+  </section>
+
+  <section class="section two">
+    <div class="card">
+      <h2>实验指标概览</h2>
+      
+      <div class="bar-row">
+        <div class="bar-label">嵌入容量</div>
+        <div class="bar-track"><span style="width:76%;background:#2563eb"></span></div>
+        <div class="bar-value">76%</div>
+      </div>
+    
+      
+      <div class="bar-row">
+        <div class="bar-label">载体质量</div>
+        <div class="bar-track"><span style="width:89%;background:#0f9f8f"></span></div>
+        <div class="bar-value">89%</div>
+      </div>
+    
+      
+      <div class="bar-row">
+        <div class="bar-label">鲁棒性</div>
+        <div class="bar-track"><span style="width:79%;background:#d97706"></span></div>
+        <div class="bar-value">79%</div>
+      </div>
+    
+      
+      <div class="bar-row">
+        <div class="bar-label">可检测风险</div>
+        <div class="bar-track"><span style="width:21%;background:#e11d48"></span></div>
+        <div class="bar-value">21%</div>
+      </div>
+    
+      <p class="muted">生成式图像水印项目展示 AIGC 内容标识、扰动增强和水印验证结果。</p>
+    </div>
+    <div class="card">
+      <h2>代码组成</h2>
+      
+      <div class="bar-row">
+        <div class="bar-label">src 核心代码 (980 行)</div>
+        <div class="bar-track"><span style="width:97%;background:#2563eb"></span></div>
+        <div class="bar-value">97%</div>
+      </div>
+    
+      
+      <div class="bar-row">
+        <div class="bar-label">examples 示例 (11 行)</div>
+        <div class="bar-track"><span style="width:4%;background:#0f9f8f"></span></div>
+        <div class="bar-value">4%</div>
+      </div>
+    
+      
+      <div class="bar-row">
+        <div class="bar-label">tests 测试 (21 行)</div>
+        <div class="bar-track"><span style="width:4%;background:#d97706"></span></div>
+        <div class="bar-value">4%</div>
+      </div>
+    
+      <table>
+        <tr><th>目录</th><th>说明</th></tr>
+        <tr><td>src</td><td>核心算法、CLI、实验配置和工具函数</td></tr>
+        <tr><td>examples</td><td>可直接运行的 demo</td></tr>
+        <tr><td>tests</td><td>smoke tests 与报告导出测试</td></tr>
+      </table>
+    </div>
+  </section>
+
+  <section class="section card">
+    <h2>实验流程</h2>
+    <div class="flow"><div class="flow-node"><b>1</b><span>生成图像样本</span></div><div class="flow-arrow">→</div><div class="flow-node"><b>2</b><span>水印嵌入</span></div><div class="flow-arrow">→</div><div class="flow-node"><b>3</b><span>裁剪压缩攻击</span></div><div class="flow-arrow">→</div><div class="flow-node"><b>4</b><span>检测验证</span></div><div class="flow-arrow">→</div><div class="flow-node"><b>5</b><span>溯源报告</span></div></div>
+  </section>
+
+  <section class="section two">
+    <div class="card">
+      <h2>启动方式</h2>
+      <pre>python examples/demo.py
+python -m unittest discover -s tests
+python -m diffusion_image_watermark.cli --message "demo payload" --report docs/cli_report.md</pre>
+    </div>
+    <div class="card">
+      <h2>结果说明</h2>
+      <p>运行 demo 后会输出 Markdown 风格的指标摘要，并在需要时导出 JSON/Markdown 报告。核心判断项是 <b>payload_ok</b>，为 True 表示嵌入信息能够被成功提取。</p>
+      <p>本可视化报告用于展示项目功能、运行结果和代码组成，适合放在 GitHub 仓库的 <code>docs/visual_report.html</code> 中作为开源项目说明材料。</p>
+    </div>
+  </section>
+
+  <section class="section card">
+    <h2>项目数据快照</h2>
+    <pre>{
+  &quot;slug&quot;: &quot;diffusion-image-watermark&quot;,
+  &quot;metrics&quot;: {
+    &quot;capacity&quot;: 76,
+    &quot;quality&quot;: 89,
+    &quot;robustness&quot;: 79,
+    &quot;detectability&quot;: 21,
+    &quot;primary&quot;: &quot;生成式图像水印项目展示 AIGC 内容标识、扰动增强和水印验证结果。&quot;,
+    &quot;flow&quot;: [
+      &quot;生成图像样本&quot;,
+      &quot;水印嵌入&quot;,
+      &quot;裁剪压缩攻击&quot;,
+      &quot;检测验证&quot;,
+      &quot;溯源报告&quot;
+    ]
+  },
+  &quot;code&quot;: {
+    &quot;src&quot;: 980,
+    &quot;examples&quot;: 11,
+    &quot;tests&quot;: 21,
+    &quot;total&quot;: 1012
+  }
+}</pre>
+  </section>
+
+  <footer>
+    GitHub: <a href="https://github.com/Buzzbbb/diffusion-image-watermark">https://github.com/Buzzbbb/diffusion-image-watermark</a> · Copyright (c) 2026 Lin Yubin, Zeng Ke, Tian Chengjin, Shanxiang Lv, Jinan University
+  </footer>
+</main>
+</body>
+</html>
