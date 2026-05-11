@@ -45,9 +45,9 @@ diffusion-image-watermark/
 
 ## 截图材料
 
-- 项目目录截图：上传 GitHub 后截取 `https://github.com/Buzzbbb/diffusion-image-watermark` 仓库目录页。
-- 项目说明截图：上传 GitHub 后截取 README 展示页。
-- 项目声明截图：上传 GitHub 后截取 README 或 LICENSE 中作者与单位声明页面。
+- 项目目录截图：`screenshots/directory.png`
+- 项目说明截图：`screenshots/readme.png`
+- 项目声明截图：`screenshots/license.png`
 
 ## 关键词
 
